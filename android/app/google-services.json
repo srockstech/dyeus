@@ -1,34 +1,49 @@
 {
   "project_info": {
-    "project_number": "525030120892",
-    "project_id": "flash-chat-f9b5a",
-    "storage_bucket": "flash-chat-f9b5a.appspot.com"
+    "project_number": "606133884258",
+    "project_id": "dyeus-26ba3",
+    "storage_bucket": "dyeus-26ba3.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:525030120892:android:77732e9248290aa6295fb9",
+        "mobilesdk_app_id": "1:606133884258:android:c0bc65e98d31483d77883b",
         "android_client_info": {
-          "package_name": "tech.srocks.flash_chat"
+          "package_name": "tech.srocks.dyeus"
         }
       },
       "oauth_client": [
         {
-          "client_id": "525030120892-gdjk518c6tj2ngftglajh8dk9hjcjcff.apps.googleusercontent.com",
+          "client_id": "606133884258-nibntspkohq8kuap6au1lut5l29o3428.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "tech.srocks.dyeus",
+            "certificate_hash": "09edd2b73179e648af11b7249f190315f633d203"
+          }
+        },
+        {
+          "client_id": "606133884258-ob1eb6eecihip4gatst130tcdb7mcmeg.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBnB_Doqt3jA50Ufu9j2g2OfLLPfCXalgA"
+          "current_key": "AIzaSyCLVMHLbEyo8ooYo4THqUavrTH-z3b28LQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "525030120892-gdjk518c6tj2ngftglajh8dk9hjcjcff.apps.googleusercontent.com",
+              "client_id": "606133884258-ob1eb6eecihip4gatst130tcdb7mcmeg.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "606133884258-ud1qavkl0nq59a8v7dp8ska1i107lvhh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "co.appbrewery.flashChat"
+              }
             }
           ]
         }

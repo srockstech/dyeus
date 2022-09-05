@@ -1,4 +1,4 @@
-package co.appbrewery.flash_chat;
+package co.appbrewery.dyeus;
 
 import io.flutter.embedding.android.FlutterActivity;
 
