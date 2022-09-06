@@ -1,7 +1,7 @@
+import 'package:dyeus/components/input_text_field.dart';
+import 'package:dyeus/components/rounded_button.dart';
+import 'package:dyeus/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flash_chat/components/input_text_field.dart';
-import 'package:flash_chat/components/rounded_button.dart';
-import 'package:flash_chat/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';

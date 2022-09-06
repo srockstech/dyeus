@@ -23,6 +23,7 @@ const Color kDarkBrown = Color(0xFF531319);
 const Color kLightBrown = Color(0xFF8B2030);
 const Color kPink = Color(0xFFFE4C6F);
 const Color kGreen = Color(0xFFBFFB62);
+const Color kMidGreen = Color(0xFFEDFFD0);
 const Color kLightGreen = Color(0xFFF5FFF3);
 const Color kBorderColor = Color(0xFFE2E2E2);
 const Color kHintTextColor = Color(0xFF9B9B9B);

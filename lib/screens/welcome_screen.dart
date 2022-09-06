@@ -1,4 +1,4 @@
-import 'package:flash_chat/constants.dart';
+import 'package:dyeus/constants.dart';
 import 'package:flutter/material.dart';
 
 import 'login_screen.dart';
@@ -20,10 +20,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Padding(
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(
+        child: Padding(
           padding: EdgeInsets.symmetric(vertical: screenHeight * 0.09),
           child: DefaultTabController(
             length: 2,

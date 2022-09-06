@@ -2,12 +2,12 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="17">
-      <module name="flash-chat-flutter" target="" />
+      <module name="dyeus" target="" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="flash-chat-flutter" options="" />
+      <module name="dyeus" options="" />
     </option>
   </component>
 </project>

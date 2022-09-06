@@ -1,18 +1,29 @@
+import 'package:dyeus/screens/loading_screen.dart';
+import 'package:dyeus/screens/login_screen.dart';
+import 'package:dyeus/screens/registration_screen.dart';
+import 'package:dyeus/screens/welcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flash_chat/screens/login_screen.dart';
-import 'package:flash_chat/screens/registration_screen.dart';
-import 'package:flash_chat/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'constants.dart';
 
-void main() => runApp(FlashChat());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  return runApp(FlashChat());
+}
 
-class FlashChat extends StatelessWidget {
+class FlashChat extends StatefulWidget {
+  @override
+  State<FlashChat> createState() => _FlashChatState();
+}
+
+class _FlashChatState extends State<FlashChat> {
+  bool firebaseInitializationComplete = false;
+
   @override
   Widget build(BuildContext context) {
-    Firebase.initializeApp();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
@@ -43,6 +54,7 @@ class FlashChat extends StatelessWidget {
       ),
       initialRoute: WelcomeScreen.id,
       routes: {
+        LoadingScreen.id: (context) => LoadingScreen(),
         WelcomeScreen.id: (context) => WelcomeScreen(),
         LoginScreen.id: (context) => LoginScreen(),
         RegistrationScreen.id: (context) => RegistrationScreen(),

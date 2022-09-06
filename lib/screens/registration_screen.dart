@@ -1,8 +1,8 @@
+import 'package:dyeus/components/input_text_field.dart';
+import 'package:dyeus/components/rounded_button.dart';
+import 'package:dyeus/constants.dart';
+import 'package:dyeus/screens/otp_verification.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flash_chat/components/input_text_field.dart';
-import 'package:flash_chat/components/rounded_button.dart';
-import 'package:flash_chat/constants.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -22,7 +22,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     TextInputType.emailAddress,
     TextInputType.multiline
   ];
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  FirebaseAuth _auth = FirebaseAuth.instance;
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  void showInSnackBar(String value) {
+    _scaffoldKey.currentState
+        .showSnackBar(new SnackBar(content: new Text(value)));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +136,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     letterSpacing: screenHeight * 0.0005,
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return OTPVerification(phoneNumber);
+                  }));
+                },
               ),
               SizedBox(
                 height: screenHeight * 0.02,

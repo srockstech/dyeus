@@ -1,4 +1,4 @@
-name: flash_chat
+name: dyeus
 description: A new Flutter application.
 
 version: 1.0.0+1
@@ -14,10 +14,12 @@ dependencies:
   animated_text_kit: ^4.2.1
   firebase_auth: ^3.3.16
   cloud_firestore: ^3.1.13
-  firebase_core: ^1.15.0
+  firebase_core: ^1.21.1
   modal_progress_hud: ^0.1.3
   font_awesome_flutter: ^10.1.0
   google_fonts: ^3.0.1
+  flutter_launcher_icons: ^0.10.0
+  fluttertoast: ^8.0.9
 
 dev_dependencies:
   flutter_test:
@@ -27,4 +29,4 @@ flutter:
   uses-material-design: true
 
   assets:
-  - images/
+    - images/
