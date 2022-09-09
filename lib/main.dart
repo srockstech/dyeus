@@ -1,6 +1,3 @@
-import 'package:dyeus/screens/loading_screen.dart';
-import 'package:dyeus/screens/login_screen.dart';
-import 'package:dyeus/screens/registration_screen.dart';
 import 'package:dyeus/screens/welcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -52,13 +49,7 @@ class _FlashChatState extends State<FlashChat> {
           tertiary: Colors.white,
         ),
       ),
-      initialRoute: WelcomeScreen.id,
-      routes: {
-        LoadingScreen.id: (context) => LoadingScreen(),
-        WelcomeScreen.id: (context) => WelcomeScreen(),
-        LoginScreen.id: (context) => LoginScreen(),
-        RegistrationScreen.id: (context) => RegistrationScreen(),
-      },
+      home: WelcomeScreen(),
     );
   }
 }

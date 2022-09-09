@@ -13,7 +13,7 @@ class InputTextField extends StatelessWidget {
     this.textColor = kBlack,
     this.enabledBorderColor = kBlack,
     this.focusedBorderColor = kBlack,
-    this.cursorColor = kPink,
+    this.cursorColor,
     this.fillColor = Colors.white,
     this.focusColor = Colors.white,
     this.fontSize,

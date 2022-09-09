@@ -18,12 +18,19 @@ dependencies:
   modal_progress_hud: ^0.1.3
   font_awesome_flutter: ^10.1.0
   google_fonts: ^3.0.1
-  flutter_launcher_icons: ^0.10.0
+
   fluttertoast: ^8.0.9
+  sms_autofill: ^2.2.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.10.0
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "images/logo.jpg"
 
 flutter:
   uses-material-design: true

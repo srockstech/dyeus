@@ -4,13 +4,18 @@ import 'package:dyeus/constants.dart';
 import 'package:dyeus/screens/otp_verification.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fontsstatic const String id = 'RegistrationScreen';
+import 'package:google_fonts/google_fonts.dart';
+
+class SignUpScreen extends StatefulWidget {
+  final Function onTap;
+
+  SignUpScreen({@required this.onTap});
 
   @override
-  _RegistrationScreenState createState() => _RegistrationScreenState();
+  _SignUpScreenState createState() => _SignUpScreenState();
 }
 
-class _RegistrationScreenState extends State<RegistrationScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
   String phoneNumber;
   bool showSpinner = false;
   bool hiddenPassword = true;
@@ -256,10 +261,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ),
                 GestureDetector(
                   child: Text(
-                    ' Signin',
+                    ' SignIn',
                     style:
                         TextStyle(color: kGreen, fontWeight: FontWeight.bold),
                   ),
+                  onTap: widget.onTap,
                 ),
               ],
             ),

@@ -1,12 +1,15 @@
 import 'package:dyeus/services/firebase_auth_methods.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 
 import '../components/rounded_button.dart';
 import '../constants.dart';
+import 'home_screen.dart';
 
 class OTPVerification extends StatefulWidget {
-  String phoneNumber;
+  final String phoneNumber;
 
   OTPVerification(this.phoneNumber);
 
@@ -16,8 +19,11 @@ class OTPVerification extends StatefulWidget {
 
 class _OTPVerificationState extends State<OTPVerification> {
   int resendOTPGap;
-  String otp;
+  String otp = '';
   String buttonText;
+  TextEditingController otpController;
+  FirebaseAuthMethods firebaseAuthMethod;
+  FirebaseAuth _auth = FirebaseAuth.instance;
 
   Widget bottomHelperOptions(screenHeight) {
     if (buttonText == 'Done') {
@@ -56,13 +62,60 @@ class _OTPVerificationState extends State<OTPVerification> {
     }
   }
 
+  void sendAndReadOTP() {
+    firebaseAuthMethod = FirebaseAuthMethods(
+        context: context,
+        otpController: otpController,
+        otpCode: (value) {
+          setState(() {
+            otp = value;
+          });
+        });
+  }
+
+  Future<void> autoFillOTPAndVerifyUser() async {
+    bool verify = await firebaseAuthMethod.phoneSignin(widget.phoneNumber);
+    if (verify == true) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomeScreen(),
+        ),
+      );
+    }
+  }
+
+  void verifyUserFromAutoDetectedOTP() async {
+    sendAndReadOTP();
+    await autoFillOTPAndVerifyUser();
+  }
+
+  Future<void> verifyUserFromManuallyEnteredOTP() async {
+    bool verify = await firebaseAuthMethod.verifyManuallyEnteredOtp();
+    if (verify == true) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomeScreen(),
+        ),
+      );
+    }
+  }
+
   @override
   void initState() {
     buttonText = 'Resend OTP';
-    FirebaseAuthMethods firebaseAuthMethod =
-        FirebaseAuthMethods(phoneNumber: widget.phoneNumber, context: context);
+    otpController = TextEditingController();
     startResendOTPTimer();
+    sendAndReadOTP();
+    autoFillOTPAndVerifyUser();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    otpController.dispose();
+    super.dispose();
   }
 
   @override
@@ -104,7 +157,7 @@ class _OTPVerificationState extends State<OTPVerification> {
                 height: screenHeight * 0.02,
               ),
               Text(
-                'A five digit code has been sent to +91 ${widget.phoneNumber}',
+                'A six digit code has been sent to +91 ${widget.phoneNumber}',
                 style: TextStyle(
                     color: kFontColor, fontSize: screenHeight * 0.0185),
               ),
@@ -124,38 +177,31 @@ class _OTPVerificationState extends State<OTPVerification> {
                       style:
                           TextStyle(color: kGreen, fontWeight: FontWeight.bold),
                     ),
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
                   ),
                 ],
               ),
               SizedBox(
                 height: screenHeight * 0.14,
               ),
-              TextField(
-                maxLength: 5,
-                style: TextStyle(
-                  fontSize: screenHeight * 0.04,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: screenHeight * 0.063,
+              PinFieldAutoFill(
+                decoration: UnderlineDecoration(
+                  colorBuilder: FixedColorBuilder(Colors.black),
+                  textStyle: TextStyle(
+                      fontSize: screenHeight * 0.05,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black),
                 ),
-                cursorColor: Colors.black,
-                decoration: InputDecoration(
-                  counterText: '',
-                  contentPadding: EdgeInsets.symmetric(
-                    vertical: screenHeight * 0.001,
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.transparent,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.transparent,
-                    ),
-                  ),
-                ),
-                onChanged: (value) {
-                  if (value.length == 5) {
+                controller: otpController,
+                currentCode: otp,
+                onCodeChanged: (code) {
+                  setState(() {
+                    otp = code;
+                  });
+                  if (code.length == 6) {
+                    FocusScope.of(context).requestFocus(FocusNode());
                     setState(() {
                       buttonText = 'Done';
                     });
@@ -165,36 +211,7 @@ class _OTPVerificationState extends State<OTPVerification> {
                     });
                   }
                 },
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    color: Colors.black,
-                    height: 1,
-                    width: screenHeight * 0.07,
-                  ),
-                  Container(
-                    color: Colors.black,
-                    height: 1,
-                    width: screenHeight * 0.07,
-                  ),
-                  Container(
-                    color: Colors.black,
-                    height: 1,
-                    width: screenHeight * 0.07,
-                  ),
-                  Container(
-                    color: Colors.black,
-                    height: 1,
-                    width: screenHeight * 0.07,
-                  ),
-                  Container(
-                    color: Colors.black,
-                    height: 1,
-                    width: screenHeight * 0.07,
-                  ),
-                ],
+                codeLength: 6,
               ),
               SizedBox(
                 height: screenHeight * 0.07,
@@ -217,7 +234,13 @@ class _OTPVerificationState extends State<OTPVerification> {
                     letterSpacing: screenHeight * 0.0005,
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () async {
+                  if (buttonText == 'Done') {
+                    await verifyUserFromManuallyEnteredOTP();
+                  } else if (buttonText == 'Resend OTP' && resendOTPGap == 0) {
+                    initState();
+                  }
+                },
               ),
               SizedBox(
                 height: screenHeight * 0.02,
