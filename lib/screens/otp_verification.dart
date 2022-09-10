@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:dyeus/services/firebase_auth_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 
@@ -24,6 +27,7 @@ class _OTPVerificationState extends State<OTPVerification> {
   TextEditingController otpController;
   FirebaseAuthMethods firebaseAuthMethod;
   FirebaseAuth _auth = FirebaseAuth.instance;
+  UserCredential userCredential;
 
   Widget bottomHelperOptions(screenHeight) {
     if (buttonText == 'Done') {
@@ -62,44 +66,31 @@ class _OTPVerificationState extends State<OTPVerification> {
     }
   }
 
-  void sendAndReadOTP() {
-    firebaseAuthMethod = FirebaseAuthMethods(
+  void triggerFirebaseAuthVerification() async {
+    //todo: Make it future and await in case of error
+    await Future.sync(() {
+      firebaseAuthMethod = FirebaseAuthMethods(
         context: context,
         otpController: otpController,
         otpCode: (value) {
           setState(() {
             otp = value;
           });
-        });
-  }
-
-  Future<void> autoFillOTPAndVerifyUser() async {
-    bool verify = await firebaseAuthMethod.phoneSignin(widget.phoneNumber);
-    if (verify == true) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HomeScreen(),
-        ),
+        },
       );
-    }
-  }
-
-  void verifyUserFromAutoDetectedOTP() async {
-    sendAndReadOTP();
-    await autoFillOTPAndVerifyUser();
-  }
-
-  Future<void> verifyUserFromManuallyEnteredOTP() async {
-    bool verify = await firebaseAuthMethod.verifyManuallyEnteredOtp();
-    if (verify == true) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HomeScreen(),
-        ),
-      );
-    }
+    });
+    userCredential = await firebaseAuthMethod.phoneSignIn(widget.phoneNumber);
+    _auth.authStateChanges().listen((user) {
+      if (user != null) {
+        Fluttertoast.showToast(msg: 'Verification Successful!');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomeScreen(),
+          ),
+        );
+      }
+    });
   }
 
   @override
@@ -107,8 +98,7 @@ class _OTPVerificationState extends State<OTPVerification> {
     buttonText = 'Resend OTP';
     otpController = TextEditingController();
     startResendOTPTimer();
-    sendAndReadOTP();
-    autoFillOTPAndVerifyUser();
+    triggerFirebaseAuthVerification();
     super.initState();
   }
 
@@ -236,7 +226,6 @@ class _OTPVerificationState extends State<OTPVerification> {
                 ),
                 onPressed: () async {
                   if (buttonText == 'Done') {
-                    await verifyUserFromManuallyEnteredOTP();
                   } else if (buttonText == 'Resend OTP' && resendOTPGap == 0) {
                     initState();
                   }

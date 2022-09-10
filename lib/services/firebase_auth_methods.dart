@@ -12,42 +12,17 @@ class FirebaseAuthMethods {
   FirebaseAuthMethods(
       {@required this.context, @required this.otpController, this.otpCode});
 
-  Future<bool> verifyManuallyEnteredOtp() async {
-    bool success = false;
-    PhoneAuthCredential credential;
-    try {
-      credential = PhoneAuthProvider.credential(
-        verificationId: FirebaseAuthMethods.codeVerificationId,
-        smsCode: otpController.text.trim(),
-      );
-    } catch (e) {
-      Fluttertoast.showToast(msg: e.toString());
-    }
-    try {
-      final user = await _auth.signInWithCredential(credential);
-      if (user != null) {
-        Fluttertoast.showToast(msg: 'Verification Successful!');
-        success = true;
-      }
-    } catch (e) {
-      Fluttertoast.showToast(msg: e.toString());
-    }
-    return success;
-  }
-
-  Future<bool> phoneSignin(String phoneNumber) async {
+  Future<UserCredential> phoneSignIn(String phoneNumber) async {
     String otp;
-    bool success = false;
+    UserCredential userCredential;
     await _auth.verifyPhoneNumber(
       phoneNumber: '+91$phoneNumber',
       verificationCompleted: (credential) async {
         try {
           final user = await _auth.signInWithCredential(credential);
-          if (user != null) {
+          if (_auth.currentUser != null) {
             otp = credential.smsCode;
             otpCode = (otp) {};
-            Fluttertoast.showToast(msg: 'Verified Successfully!');
-            success = true;
           }
         } catch (e) {
           Fluttertoast.showToast(msg: e);
@@ -57,11 +32,32 @@ class FirebaseAuthMethods {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(e.message)));
       },
+      // autoRetrievedSmsCodeForTesting: '987654',
       codeSent: (verificationId, resendToken) async {
-        codeVerificationId = verificationId;
+        PhoneAuthCredential credential;
+        try {
+          credential = PhoneAuthProvider.credential(
+            verificationId: verificationId,
+            smsCode: otpController.text.trim(),
+          );
+        } catch (e) {
+          Fluttertoast.showToast(msg: e.toString() + 'ok');
+        }
+        try {
+          await _auth.signInWithCredential(credential);
+        } catch (e) {
+          Fluttertoast.showToast(msg: e.toString());
+        }
       },
-      codeAutoRetrievalTimeout: (value) {},
+      codeAutoRetrievalTimeout: (value) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                'Unable to automatically read the code. Please enter it manually.'),
+          ),
+        );
+      },
     );
-    return success;
+    return userCredential;
   }
 }
