@@ -4,8 +4,8 @@
 
 Note: Preview doesn't include auto-detection of OTP due to privacy concerns. The mobile number used is a whitelisted
 number on firebase and doesn't exist. Here's the preview of the functionalities integrated till now:
-
-<img height="5%" src="https://github.com/srockstech/dyeus/blob/main/images/preview.gif">
+<br />
+<img height="20%" src="https://github.com/srockstech/dyeus/blob/main/images/preview_firebase.gif">
 
 Firebase Console preview when the signup is successful, a new user is added:
 <img height="20%" src="https://github.com/srockstech/dyeus/blob/main/images/preview_firebase.gif">
