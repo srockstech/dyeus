@@ -4,6 +4,7 @@
 
 Note: Preview doesn't include auto-detection of OTP due to privacy concerns. The mobile number used is a whitelisted
 number on firebase and doesn't exist. Here's the preview of the functionalities integrated till now:
+<br/>
 <img height="500" src="https://github.com/srockstech/dyeus/blob/main/images/preview.gif">
 
 ## Functionalities
