@@ -8,7 +8,7 @@ number on firebase and doesn't exist. Here's the preview of the functionalities 
 <img height="500" src="https://github.com/srockstech/dyeus/blob/main/images/preview.gif">
 
 Firebase Console preview when the signup is successful, a new user is added:
-<img height="500" src="https://github.com/srockstech/dyeus/blob/main/images/preview.gif">
+<img height="500" src="https://github.com/srockstech/dyeus/blob/main/images/preview_firebase.gif">
 
 ## Functionalities
 
