@@ -9,11 +9,11 @@ number on firebase and doesn't exist. Here's the preview of the functionalities 
 
 ## Functionalities
 
-- User SingUp and SignIn using Mobile Number
+- User SignUp and SignIn using Mobile Number
 - Auto-detection of verification OTP
 - Signing Out User
 - Retaining User's Login status after app is closed and relaunched
-- Some Error handling
+- Proper Error handling
 
 ## Tech Stack Used
 
