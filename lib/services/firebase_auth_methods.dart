@@ -6,11 +6,16 @@ class FirebaseAuthMethods {
   FirebaseAuth _auth = FirebaseAuth.instance;
   final BuildContext context;
   static String codeVerificationId;
+  int resendToken;
   final TextEditingController otpController;
+
   Function(String) otpCode;
 
-  FirebaseAuthMethods(
-      {@required this.context, @required this.otpController, this.otpCode});
+  FirebaseAuthMethods({
+    @required this.context,
+    @required this.otpController,
+    this.otpCode,
+  });
 
   Future<UserCredential> phoneSignIn(String phoneNumber) async {
     String otp;
@@ -19,11 +24,15 @@ class FirebaseAuthMethods {
       phoneNumber: '+91$phoneNumber',
       verificationCompleted: (credential) async {
         try {
-          final user = await _auth.signInWithCredential(credential);
-          if (_auth.currentUser != null) {
-            otp = credential.smsCode;
-            otpCode = (otp) {};
-          }
+          await _auth.signInWithCredential(credential);
+          _auth.authStateChanges().listen((user) {
+            if (user != null) {
+              otp = credential.smsCode;
+              otpCode = (otp) {};
+            } else {
+              Fluttertoast.showToast(msg: 'Signed Out');
+            }
+          });
         } catch (e) {
           Fluttertoast.showToast(msg: e);
         }
@@ -32,30 +41,35 @@ class FirebaseAuthMethods {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(e.message)));
       },
-      // autoRetrievedSmsCodeForTesting: '987654',
       codeSent: (verificationId, resendToken) async {
         PhoneAuthCredential credential;
-        try {
-          credential = PhoneAuthProvider.credential(
-            verificationId: verificationId,
-            smsCode: otpController.text.trim(),
-          );
-        } catch (e) {
-          Fluttertoast.showToast(msg: e.toString() + 'ok');
-        }
-        try {
-          await _auth.signInWithCredential(credential);
-        } catch (e) {
-          Fluttertoast.showToast(msg: e.toString());
-        }
+        otpController.addListener(() async {
+          if (otpController.text.trim().length == 6) {
+            try {
+              credential = PhoneAuthProvider.credential(
+                verificationId: verificationId,
+                smsCode: otpController.text.trim(),
+              );
+            } catch (e) {
+              Fluttertoast.showToast(msg: e.toString());
+            }
+            try {
+              await _auth.signInWithCredential(credential);
+            } catch (e) {
+              Fluttertoast.showToast(msg: e.toString());
+            }
+          }
+        });
       },
       codeAutoRetrievalTimeout: (value) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-                'Unable to automatically read the code. Please enter it manually.'),
-          ),
-        );
+        if (_auth.currentUser == null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                  'Unable to automatically read the code. Please enter it manually.'),
+            ),
+          );
+        }
       },
     );
     return userCredential;

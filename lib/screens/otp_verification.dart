@@ -80,8 +80,9 @@ class _OTPVerificationState extends State<OTPVerification> {
       );
     });
     userCredential = await firebaseAuthMethod.phoneSignIn(widget.phoneNumber);
+    int flag = 1; //So that it listens only once for one call of this function
     _auth.authStateChanges().listen((user) {
-      if (user != null) {
+      if (user != null && flag == 1) {
         Fluttertoast.showToast(msg: 'Verification Successful!');
         Navigator.push(
           context,
@@ -89,6 +90,7 @@ class _OTPVerificationState extends State<OTPVerification> {
             builder: (context) => HomeScreen(),
           ),
         );
+        flag = 0;
       }
     });
   }
